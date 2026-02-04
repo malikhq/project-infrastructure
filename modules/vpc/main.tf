@@ -11,13 +11,12 @@ module "vpc" {
   public_subnets  = var.public_subnets
 
   enable_nat_gateway   = true
-  enable_vpn_gateway   = true
   single_nat_gateway   = true
   enable_dns_hostnames = true
 
   tags = {
-    Managed_By  = "terraform-eks"
-    Environment = "development"
+    "kubernetes.io/cluster/dev-cluster" = "shared"
+
   }
 
   public_subnet_tags = {

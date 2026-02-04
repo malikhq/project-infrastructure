@@ -28,11 +28,11 @@ module "eks" {
 
   node_security_group_additional_rules = {
     ingress_cluster_api = {
-      description = "Allow cluster API"
-      protocol    = "tcp"
-      from_port   = 443
-      to_port     = 443
-      type        = "ingress"
+      description                   = "Allow cluster API"
+      protocol                      = "tcp"
+      from_port                     = 443
+      to_port                       = 443
+      type                          = "ingress"
       source_cluster_security_group = true
     }
   }
