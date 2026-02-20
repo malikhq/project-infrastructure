@@ -1,3 +1,9 @@
+
+resource "random_string" "suffix" {
+  length  = 8
+  special = false
+}
+
 module "vpc" {
   source   = "../modules/vpc"
   vpc_name = "dev-vpc"
@@ -8,13 +14,12 @@ module "vpc" {
 }
 
 
-# module "eks" {
-#   source          = "../modules/eks"
-#   cluster_name    = "dev-cluster"
-#   vpc_id          = module.vpc.vpc_id
-#   private_subnets = module.vpc.private_subnets
-# }
-
+module "eks" {
+  source          = "../modules/eks"
+  cluster_name    = "dev-cluster-${random_string.suffix.result}"
+  vpc_id          = module.vpc.vpc_id
+  private_subnets = module.vpc.private_subnets
+}
 
 
 # module "cloudwatch" {
