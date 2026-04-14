@@ -16,7 +16,7 @@ module "eks" {
 
 
   endpoint_public_access           = true
-  enable_cluster_creator_admin_permissions  = false
+  enable_cluster_creator_admin_permissions  = true
 
 
   vpc_id     = var.vpc_id
