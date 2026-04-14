@@ -12,3 +12,8 @@ output "cluster_name" {
   description = "The name of the EKS cluster"
   value       = module.eks.cluster_name
 }
+
+output "eks_connect" {
+  description = "EKS Connect configuration"
+  value       = "aws eks update-kubeconfig --name ${module.eks.cluster_name} --region ${var.region}"
+}
