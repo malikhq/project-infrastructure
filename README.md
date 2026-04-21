@@ -1,6 +1,6 @@
 # Terraform EKS Infrastructure
 
-This repository contains **Terraform-based infrastructure code** to deploy and manage a **modular AWS EKS (Elastic Kubernetes Service) cluster**. It includes VPC setup, cluster bootstrapping, and common add-ons like ArgoCD, CloudWatch, Helm, and Kyverno.
+This repository contains **Terraform-based infrastructure code** to deploy and manage a **modular AWS EKS (Elastic Kubernetes Service) cluster**. It includes VPC setup, cluster bootstrapping, and common add-ons like ArgoCD.
 
 ---
 
