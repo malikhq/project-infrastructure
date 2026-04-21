@@ -15,20 +15,20 @@ module "eks" {
   kubernetes_version = "1.35"
 
 
-  endpoint_public_access           = true
-  enable_cluster_creator_admin_permissions  = true
+  endpoint_public_access                   = true
+  enable_cluster_creator_admin_permissions = true
 
 
   vpc_id     = var.vpc_id
   subnet_ids = var.private_subnets
 
   # Enable KMS encryption for EKS secrets
-  create_kms_key                = true
-  kms_key_description           = "KMS Secrets encryption for EKS cluster."
-  enable_irsa                   = true
+  create_kms_key      = true
+  kms_key_description = "KMS Secrets encryption for EKS cluster."
+  enable_irsa         = true
 
   # EKS Addons
- addons = {
+  addons = {
     coredns = {}
     aws-ebs-csi-driver = {
       service_account_role_arn = module.ebs_csi_driver_irsa.arn
