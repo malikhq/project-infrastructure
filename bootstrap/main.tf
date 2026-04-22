@@ -35,7 +35,3 @@ module "eks" {
 module "argo_cd" {
   source = "../modules/addons/argo-cd"
 }
-
-module "kyverno" {
-  source = "../modules/addons/kyverno"
-}
