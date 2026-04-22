@@ -1,4 +1,4 @@
-variable "version" {
+variable "argocd_version" {
   description = "The version of Argo CD to install"
   type        = string
   default     = "4.5.2"
