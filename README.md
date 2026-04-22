@@ -25,7 +25,7 @@ This repository contains **Terraform-based infrastructure code** to deploy and m
 │   ├── addons      # Add-ons like ArgoCD, CloudWatch, Helm, Kyverno
 │   ├── eks         # EKS cluster module
 │   └── vpc         # VPC networking module
-└── scripts         # Utility scripts for deployment or maintenance
+                 
 
 ````
 
@@ -85,20 +85,7 @@ Deploys the EKS cluster with configurable node groups, Fargate profiles, and IAM
 Optional modules to install and configure common tools:
 
 * **ArgoCD**: GitOps deployment
-* **CloudWatch**: Cluster monitoring
 * **Helm**: Helm package management
-* **Kyverno**: Kubernetes policy engine
-
----
-
-## Scripts
-
-Utility scripts are available in the `scripts` folder to assist with:
-
-* Cluster bootstrapping
-* Node provisioning
-* Post-deployment configuration
-
 ---
 
 ## Best Practices
