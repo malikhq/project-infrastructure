@@ -12,5 +12,6 @@ output "cluster_name" {
 output "cluster_certificate_authority_data" {
   description = "The certificate authority data for the EKS cluster"
   value       = module.eks.cluster_certificate_authority_data
+  sensitive   = true
 }
 
