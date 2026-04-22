@@ -17,3 +17,8 @@ output "eks_connect" {
   description = "EKS Connect configuration"
   value       = "aws eks update-kubeconfig --name ${module.eks.cluster_name} --region ${var.region}"
 }
+
+output "cluster_certificate_authority_data" {
+  description = "The certificate authority data for the EKS cluster"
+  value       = module.eks.cluster_certificate_authority_data
+} 
