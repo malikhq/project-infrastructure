@@ -1,0 +1,61 @@
+name: Terraform-CI  
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+env:
+  TF_WORKING_DIR: ./bootstrap # update this path to your actual Terraform directory
+permissions:
+  id-token: write
+  contents: read
+  actions: read        # Required to identify workflow run.
+  checks: write        # Required to add status summary.
+  pull-requests: write # Required to add PR comment.
+
+jobs:
+  terraform-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@ec61189d14ec14c8efccab744f656cffd0e33f37 # v6.1.0
+        with:
+          aws-region: us-east-1
+          role-to-assume:  arn:aws:iam::564121863674:role/terraform-oidc-role
+        
+      - name: Debug AWS identity
+        run: aws sts get-caller-identity
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85 # v4.0.0
+        with:
+          terraform_wrapper: false 
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform Init
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init -upgrade 
+        
+        
+      - uses: op5dev/tf-via-pr@8d74c69c2863bcb3bb87c8313ca46bc2fc89b98a # v13.7.3
+        if: github.event_name == 'pull_request'
+        with:
+          working-directory: ${{ env.TF_WORKING_DIR }}
+          command: plan
+          plan-encrypt: ${{ secrets.PASSPHRASE }}
+    
+
+      - name: Terraform Apply
+        uses: op5dev/tf-via-pr@v13
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        with:
+          working-directory: ${{ env.TF_WORKING_DIR }}
+          command: apply
+          plan-encrypt: ${{ secrets.PASSPHRASE }}
