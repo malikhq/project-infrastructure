@@ -5,7 +5,6 @@ header-from: main.tf
 recursive:
   enabled: true
   paths: modules
-  include-main: true
 
 output:
   file: README.md
