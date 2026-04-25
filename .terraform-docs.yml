@@ -4,7 +4,7 @@ header-from: main.tf
 
 recursive:
   enabled: true
-  paths: modules
+  path: modules
   include-main: true
 
 output:
