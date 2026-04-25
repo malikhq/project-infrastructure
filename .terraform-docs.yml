@@ -4,7 +4,7 @@ header-from: main.tf
 
 recursive:
   enabled: true
-  paths: [modules, bootstrap]
+  paths: modules
   include-main: true
 
 output:
@@ -15,7 +15,7 @@ output:
     {{ .Content }}
     <!-- End of Document -->
 
-content: |-
+content: |
   {{ .Header }}
 
   {{ .Requirements }}
