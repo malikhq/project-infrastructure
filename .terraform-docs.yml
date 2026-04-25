@@ -4,9 +4,9 @@ header-from: main.tf
 
 recursive:
   enabled: true
-  path: modules
+  path: .
   include-main: true
-
+  
 output:
   file: README.md
   mode: replace
