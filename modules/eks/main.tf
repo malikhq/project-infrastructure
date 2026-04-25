@@ -1,3 +1,21 @@
+/**
+ * # EKS Cluster Module
+ * This module uses the `terraform-aws-modules/eks/aws` module to create an EKS cluster with specified configurations. It includes settings for Kubernetes version, node groups, logging, and addons.               
+ * ## Configuration
+ * - `name`: The name of the EKS cluster (e.g., "my-eks-cluster")
+ * - `kubernetes_version`: The version of Kubernetes to use (e.g., "1.35")
+ * - `vpc_id`: The ID of the VPC where the cluster will be deployed
+ * - `subnet_ids`: A list of subnet IDs for the cluster nodes
+ * - `addons`: A map of addons to install (e.g., CoreDNS, VPC CNI)
+ * - `encryption_config`: Configuration for encrypting Kubernetes secrets using KMS
+ * - `enabled_log_types`: A list of control plane log types to enable (e.g., "api", "audit")
+ * - `cloudwatch_log_group_retention_in_days`: Retention period for CloudWatch logs
+ * - `eks_managed_node_groups`: Configuration for EKS managed node groups, including instance types and scaling settings
+ * - `tags`: A map of tags to apply to the cluster resources
+ * ## Usage
+ * This module can be used in a Terraform configuration to create an EKS cluster with the specified settings. It can be combined with other modules (e.g., for addons like Argo CD) to deploy a complete Kubernetes environment.
+ */
+
 locals {
   cluster_name = "${var.cluster_name}-${random_string.suffix.result}"
 }

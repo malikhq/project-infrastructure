@@ -1,3 +1,16 @@
+/**
+ * # VPC Module
+ *
+ * This module creates a Virtual Private Cloud (VPC) with public and private subnets, along with a NAT gateway for internet access from the private subnets. It uses the `terraform-aws-modules/vpc/aws` module to provision the necessary networking resources for the EKS cluster.
+ *
+ * ## Configuration
+ * - `name`: The name of the VPC (e.g., "my-vpc")
+ * - `cidr`: The CIDR block for the VPC (e.g., "10.0.0.0/16")
+ * ## Usage
+ * This module can be used in a Terraform configuration to create a VPC with the specified settings.
+ */
+
+
 # This module creates a VPC with public and private subnets, and a NAT gateway for internet access from the private subnets.
 data "aws_availability_zones" "available" {
   filter {
