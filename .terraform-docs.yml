@@ -14,7 +14,7 @@ output:
     {{ .Content }}
     <!-- End of Document -->
 
-content: |
+content: |-
   {{ .Header }}
 
   {{ .Requirements }}
