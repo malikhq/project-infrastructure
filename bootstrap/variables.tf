@@ -7,6 +7,6 @@ variable "region" {
 variable "bucket_name" {
   description = "backend bucket name"
   type        = string
-  default     = "my-bucket"
+  default     = "malikhq-dev-infra-tfstate"
 
 }

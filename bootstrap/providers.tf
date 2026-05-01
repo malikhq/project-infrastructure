@@ -10,12 +10,24 @@ terraform {
       source  = "hashicorp/random"
       version = "~> 3.0"
     }
+
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.29"
+    }
+
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.13"
+    }
   }
 }
 
 # Configure the AWS Provider
 provider "aws" {
   region = var.region
+
+
 }
 
 
