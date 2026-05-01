@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket       = var.bucket_name
+    bucket       = "malikhq-dev-infra-tfstate"
     key          = "dev/terraform.tfstate"
     region       = "us-east-1"
     use_lockfile = true
