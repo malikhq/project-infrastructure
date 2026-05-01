@@ -85,10 +85,10 @@ module "eks" {
 # ebs-csi-controller-sa is the default service account name for the EBS CSI driver controller component
 
 module "ebs_csi_driver_irsa" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "~> 5.0"
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  # version = "~> 5.0"
 
-  role_name = "ebs-csi"
+  name = "ebs-csi"
 
   attach_ebs_csi_policy = true
 
