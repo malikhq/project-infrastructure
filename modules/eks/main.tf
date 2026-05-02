@@ -16,15 +16,6 @@
  * This module can be used in a Terraform configuration to create an EKS cluster with the specified settings. It can be combined with other modules (e.g., for addons like Argo CD) to deploy a complete Kubernetes environment.
  */
 
-locals {
-  cluster_name = "${var.cluster_name}-${random_string.suffix.result}"
-}
-
-resource "random_string" "suffix" {
-  length  = 8
-  special = false
-}
-
 
 module "eks" {
   source             = "terraform-aws-modules/eks/aws"
@@ -49,7 +40,7 @@ module "eks" {
   addons = {
     coredns = {}
     aws-ebs-csi-driver = {
-      service_account_role_arn = module.ebs_csi_driver_irsa.arn
+      service_account_role_arn = module.ebs_csi_driver_irsa.iam_role_arn
     }
     kube-proxy = {}
     vpc-cni = {
@@ -94,9 +85,10 @@ module "eks" {
 # ebs-csi-controller-sa is the default service account name for the EBS CSI driver controller component
 
 module "ebs_csi_driver_irsa" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "~> 5.0"
 
-  name = "ebs-csi"
+  role_name = "ebs-csi"
 
   attach_ebs_csi_policy = true
 
