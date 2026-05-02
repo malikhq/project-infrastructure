@@ -52,10 +52,10 @@ jobs:
           plan-encrypt: ${{ secrets.PASSPHRASE }}
     
 
-    #   - name: Terraform Apply
-    #     uses: op5dev/tf-via-pr@v13
-    #     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    #     with:
-    #       working-directory: ${{ env.TF_WORKING_DIR }}
-    #       command: apply
-    #       plan-encrypt: ${{ secrets.PASSPHRASE }}
+      - name: Terraform Apply
+        uses: op5dev/tf-via-pr@v13
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        with:
+          working-directory: ${{ env.TF_WORKING_DIR }}
+          command: apply
+          plan-encrypt: ${{ secrets.PASSPHRASE }}
