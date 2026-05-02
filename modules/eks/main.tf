@@ -40,7 +40,7 @@ module "eks" {
   addons = {
     coredns = {}
     aws-ebs-csi-driver = {
-      service_account_role_arn = module.ebs_csi_driver_irsa.arn
+      service_account_role_arn = module.ebs_csi_driver_irsa.iam_role_arn
     }
     kube-proxy = {}
     vpc-cni = {
@@ -85,10 +85,10 @@ module "eks" {
 # ebs-csi-controller-sa is the default service account name for the EBS CSI driver controller component
 
 module "ebs_csi_driver_irsa" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  # version = "~> 5.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "~> 5.0"
 
-  name = "ebs-csi"
+  role_name = "ebs-csi"
 
   attach_ebs_csi_policy = true
 
