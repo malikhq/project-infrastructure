@@ -205,3 +205,34 @@ The module READMEs under `modules/` are generated documentation. Make durable mo
 - The VPC module currently uses one NAT gateway. This is cost-conscious for dev, but less resilient than one NAT gateway per AZ.
 - The EKS API endpoint is public. Restrict access before using this for sensitive environments.
 - Argo CD is installed after the cluster providers are configured from the EKS module outputs.
+
+<!-- BEGIN_TF_DOCS -->
+
+
+## Requirements
+
+No requirements.
+
+## Providers
+
+No providers.
+
+## Usage
+To use this module in your Terraform environment, include it in your Terraform configuration with the necessary parameters. Below is an example of how to use this module:
+
+## Modules
+
+No modules.
+
+## Resources
+
+No resources.
+
+## Inputs
+
+No inputs.
+
+## Outputs
+
+No outputs.
+<!-- END_TF_DOCS -->
