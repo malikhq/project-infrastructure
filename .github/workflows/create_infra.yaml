@@ -1,3 +1,8 @@
+# This workflow runs Terraform commands on push to main and on pull requests.
+# It uses OIDC to authenticate with AWS and assumes a role to execute Terraform commands.
+# The workflow includes steps to check Terraform formatting, initialize the Terraform working directory, and run Terraform plan on pull requests.
+# Note: The Terraform apply step is commented out for safety. Uncomment it to enable automatic deployment on push to main.
+
 name: Terraform-CI  
 
 on:
@@ -6,7 +11,7 @@ on:
       - main
   pull_request:
 env:
-  TF_WORKING_DIR: ./bootstrap # update this path to your actual Terraform directory
+  TF_WORKING_DIR: ./infrastructures/bootstrap # update this path to your actual Terraform directory
 permissions:
   id-token: write
   contents: read

@@ -20,7 +20,7 @@ resource "random_string" "suffix" {
 
 # VPC module
 module "vpc" {
-  source   = "../modules/vpc"
+  source   = "../../modules/vpc"
   vpc_name = "dev-vpc"
   cidr     = "10.0.0.0/16"
 
@@ -30,7 +30,7 @@ module "vpc" {
 
 # EKS module
 module "eks" {
-  source          = "../modules/eks"
+  source          = "../../modules/eks"
   cluster_name    = "dev-cluster-${random_string.suffix.result}"
   vpc_id          = module.vpc.vpc_id
   private_subnets = module.vpc.private_subnets
@@ -39,5 +39,5 @@ module "eks" {
 
 # Addons
 module "argo_cd" {
-  source = "../modules/addons/argo-cd"
+  source = "../../modules/addons/argo-cd"
 }

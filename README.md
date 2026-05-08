@@ -1,8 +1,8 @@
-# Terraform EKS Infrastructure
+# Terraform EKS Platform Lab
 
-This repository provisions a development-grade AWS EKS platform with Terraform. The stack is intentionally modular: the root `bootstrap` configuration wires together reusable VPC, EKS, and add-on modules.
+This repository provisions a development AWS EKS platform with Terraform. The root stack lives in `infrastructures/bootstrap` and composes reusable modules for networking, EKS, and platform add-ons.
 
-The current deployment creates:
+The current stack creates:
 
 - A VPC across three availability zones
 - Public and private subnets with Kubernetes load balancer tags
@@ -18,23 +18,33 @@ The current deployment creates:
 
 ```text
 .
-|-- bootstrap/
-|   |-- backend.tf       # Remote state backend configuration
-|   |-- main.tf          # Root composition for VPC, EKS, and add-ons
-|   |-- outputs.tf       # Useful connection and cluster outputs
-|   |-- providers.tf     # AWS, Kubernetes, Helm, and Random providers
-|   `-- variables.tf     # Root input variables
-|-- modules/
-|   |-- addons/
-|   |   `-- argo-cd/     # Argo CD Helm release module
-|   |-- eks/             # EKS cluster module
-|   `-- vpc/             # VPC networking module
+|-- ai-workflows/       # Reserved for AI workflow automation and experiments
+|-- apps/               # Reserved for application workloads and service manifests
+|-- documentations      # Reserved for documentations 
+|-- gitops/             # Reserved for GitOps application definitions
+|-- helm/               # Reserved for reusable Helm charts or values
+|-- infrastructures/
+|   |-- bootstrap/
+|   |   |-- backend.tf       # Remote state backend configuration
+|   |   |-- main.tf          # Root composition for VPC, EKS, and add-ons
+|   |   |-- outputs.tf       # Useful connection and cluster outputs
+|   |   |-- providers.tf     # AWS, Kubernetes, Helm, and Random providers
+|   |   `-- variables.tf     # Root input variables
+|   `-- modules/
+|       |-- addons/
+|       |   `-- argo-cd/     # Argo CD Helm release module
+|       |-- eks/             # EKS cluster module
+|       `-- vpc/             # VPC networking module
+|-- monitoring/         # Reserved for observability configuration
+|-- security/           # Reserved for security policies, scans, and controls
 |-- .github/workflows/
-|   |-- create_infra.yaml    # Terraform plan/apply workflow
+|   |-- create_infra.yaml    # Terraform plan workflow
 |   |-- terraform-doc.yaml   # Module README generation workflow
 |   `-- tflint.yaml          # Terraform lint workflow
 `-- .terraform-docs.yml      # terraform-docs configuration
 ```
+
+The top-level `ai-workflows`, `apps`, `gitops`, `helm`, `monitoring`, and `security` directories are currently placeholders. They are included to show the intended platform layout as the lab grows beyond the base Terraform infrastructure.
 
 ## Prerequisites
 
@@ -47,7 +57,7 @@ The current deployment creates:
 
 ## Remote State
 
-Terraform state is configured in [bootstrap/backend.tf](/Users/malik/malikhq/full-devops-project/project-infrastructure/bootstrap/backend.tf:1):
+Terraform state is configured in [infrastructures/bootstrap/backend.tf](infrastructures/bootstrap/backend.tf):
 
 ```hcl
 bucket       = "malikhq-dev-infra-tfstate"
@@ -60,10 +70,10 @@ Create or confirm this backend before running `terraform init`. The backend stor
 
 ## Usage
 
-Run Terraform from the `bootstrap` directory:
+Run Terraform from the bootstrap directory:
 
 ```bash
-cd bootstrap
+cd infrastructures/bootstrap
 terraform init
 terraform fmt -recursive
 terraform validate
@@ -74,7 +84,7 @@ terraform apply
 To destroy the development stack:
 
 ```bash
-cd bootstrap
+cd infrastructures/bootstrap
 terraform destroy
 ```
 
@@ -86,7 +96,7 @@ The root configuration currently defaults to `us-east-1`:
 | --- | --- | --- |
 | `region` | `us-east-1` | AWS region used by the root providers |
 
-The `bootstrap` stack currently hard-codes the development network and cluster shape in [bootstrap/main.tf](/Users/malik/malikhq/full-devops-project/project-infrastructure/bootstrap/main.tf:20):
+The bootstrap stack currently hard-codes the development network and cluster shape in [infrastructures/bootstrap/main.tf](infrastructures/bootstrap/main.tf):
 
 | Setting | Value |
 | --- | --- |
@@ -101,7 +111,7 @@ The `bootstrap` stack currently hard-codes the development network and cluster s
 
 ### VPC
 
-Path: [modules/vpc](/Users/malik/malikhq/full-devops-project/project-infrastructure/modules/vpc/main.tf:1)
+Path: [infrastructures/modules/vpc](infrastructures/modules/vpc)
 
 This module wraps `terraform-aws-modules/vpc/aws` version `~> 6.6.0`.
 
@@ -117,7 +127,7 @@ It creates:
 
 ### EKS
 
-Path: [modules/eks](/Users/malik/malikhq/full-devops-project/project-infrastructure/modules/eks/main.tf:1)
+Path: [infrastructures/modules/eks](infrastructures/modules/eks)
 
 This module wraps `terraform-aws-modules/eks/aws` version `~> 21.15.0`.
 
@@ -136,7 +146,7 @@ It creates:
 
 ### Argo CD
 
-Path: [modules/addons/argo-cd](/Users/malik/malikhq/full-devops-project/project-infrastructure/modules/addons/argo-cd/main.tf:1)
+Path: [infrastructures/modules/addons/argo-cd](infrastructures/modules/addons/argo-cd)
 
 This module installs Argo CD with the Helm provider.
 
@@ -147,7 +157,7 @@ Current defaults:
 | `argocd_version` | `4.5.2` | Argo CD Helm chart version |
 | `namespace` | `argocd` | Kubernetes namespace created for Argo CD |
 
-The Helm values file is stored at [modules/addons/argo-cd/values/argocd-values.yaml](/Users/malik/malikhq/full-devops-project/project-infrastructure/modules/addons/argo-cd/values/argocd-values.yaml:1).
+The Helm values file is stored at [infrastructures/modules/addons/argo-cd/values/argocd-values.yaml](infrastructures/modules/addons/argo-cd/values/argocd-values.yaml).
 
 ## Outputs
 
@@ -164,6 +174,7 @@ After apply, the root stack exposes:
 To configure local `kubectl` access:
 
 ```bash
+cd infrastructures/bootstrap
 terraform output -raw eks_connect
 ```
 
@@ -178,61 +189,30 @@ kubectl get pods -n argocd
 
 ### Terraform CI
 
-[.github/workflows/create_infra.yaml](/Users/malik/malikhq/full-devops-project/project-infrastructure/.github/workflows/create_infra.yaml:1) runs Terraform from `./bootstrap`.
+[.github/workflows/create_infra.yaml](.github/workflows/create_infra.yaml) runs Terraform from `./infrastructures/bootstrap`.
 
 - Pull requests run `terraform init` and `terraform plan`
-- Pushes to `main` run `terraform apply`
+- Pushes to `main` currently run the workflow, but the `terraform apply` step is commented out
 - AWS authentication uses GitHub OIDC and assumes `arn:aws:iam::564121863674:role/terraform-oidc-role`
 - Plans are handled through `op5dev/tf-via-pr`
 - The workflow expects `secrets.PASSPHRASE` for encrypted plan handling
 
 ### TFLint
 
-[.github/workflows/tflint.yaml](/Users/malik/malikhq/full-devops-project/project-infrastructure/.github/workflows/tflint.yaml:1) runs on pull requests and uses TFLint `v0.52.0`.
+[.github/workflows/tflint.yaml](.github/workflows/tflint.yaml) runs on pull requests and uses TFLint `v0.52.0`.
 
 ### Terraform Docs
 
-[.github/workflows/terraform-doc.yaml](/Users/malik/malikhq/full-devops-project/project-infrastructure/.github/workflows/terraform-doc.yaml:1) regenerates module README files on pull requests using `.terraform-docs.yml`.
+[.github/workflows/terraform-doc.yaml](.github/workflows/terraform-doc.yaml) regenerates module README files on pull requests using [.terraform-docs.yml](.terraform-docs.yml).
 
-The module READMEs under `modules/` are generated documentation. Make durable module documentation changes in Terraform headers, variables, outputs, and `.terraform-docs.yml`.
+The recursive terraform-docs configuration targets modules under `infrastructures/modules`. Module READMEs are generated documentation, so durable module documentation changes should be made in Terraform headers, variables, outputs, and `.terraform-docs.yml`.
 
 ## Operational Notes
 
 - Keep `.terraform/`, `*.tfstate`, and local plan files out of Git.
 - Commit `.terraform.lock.hcl` for reproducible provider selections unless there is a deliberate reason not to.
-- Treat the current `bootstrap` values as a development environment baseline.
+- Treat the current bootstrap values as a development environment baseline.
 - Review Kubernetes and EKS version compatibility before changing `kubernetes_version`.
-- The VPC module currently uses one NAT gateway. This is cost-conscious for dev, but less resilient than one NAT gateway per AZ.
+- The VPC module currently uses one NAT gateway. This is cost-conscious for development, but less resilient than one NAT gateway per AZ.
 - The EKS API endpoint is public. Restrict access before using this for sensitive environments.
 - Argo CD is installed after the cluster providers are configured from the EKS module outputs.
-
-<!-- BEGIN_TF_DOCS -->
-
-
-## Requirements
-
-No requirements.
-
-## Providers
-
-No providers.
-
-## Usage
-To use this module in your Terraform environment, include it in your Terraform configuration with the necessary parameters. Below is an example of how to use this module:
-
-## Modules
-
-No modules.
-
-## Resources
-
-No resources.
-
-## Inputs
-
-No inputs.
-
-## Outputs
-
-No outputs.
-<!-- END_TF_DOCS -->
